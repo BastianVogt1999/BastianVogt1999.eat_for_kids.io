@@ -181,6 +181,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  flutter_swipe_action_cell:
+    dependency: "direct main"
+    description:
+      name: flutter_swipe_action_cell
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -191,8 +198,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  google_nav_bar:
+    dependency: "direct main"
+    description:
+      name: google_nav_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.6"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"

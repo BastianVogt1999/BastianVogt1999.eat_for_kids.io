@@ -148,10 +148,20 @@ class _HomeWidgetState extends State<HomeWidget> {
                           onPressed: () {
                             ChildValue child = ChildValue.empty();
                             child.name = textController.text;
-                            bool success =
-                                InsertStatements().insertNewUser(child);
-                            if (success) {
-                              Navigator.of(context).pop;
+                            if (textController.text != "" &&
+                                textController.text.length < 10) {
+                              bool success =
+                                  InsertStatements().insertNewUser(child);
+                              if (success) {
+                                textController.text = "";
+                                Navigator.of(context).pop;
+                              } else {
+                                textController.text = "";
+                                Navigator.of(context).pop;
+                              }
+                            } else if (textController.text.length >= 10) {
+                              // ignore: avoid_print
+                              print("zu groß");
                             }
                           },
                           child: const Text('Speichern'),

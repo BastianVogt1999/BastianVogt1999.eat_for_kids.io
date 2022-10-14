@@ -38,6 +38,18 @@ class _CreateMenuState extends State<CreateMenu> {
 
   @override
   Widget build(BuildContext context) {
+    int countOfRows;
+    double rowFontSize;
+
+    if (MediaQuery.of(context).copyWith().size.width > 600) {
+      countOfRows = 4;
+      rowFontSize = 5.sp;
+    } else {
+      countOfRows = 2;
+
+      rowFontSize = 20.sp;
+    }
+
     refactorPreffered() {
       List<String> localList = [];
 
@@ -113,15 +125,13 @@ class _CreateMenuState extends State<CreateMenu> {
       return Row(
         children: [
           SizedBox(
-              width: 49.4.w,
-              child: tableList(currentPreffered, Icons.favorite)),
+              width: 49.w, child: tableList(currentPreffered, Icons.favorite)),
           Expanded(
               child: Container(
-            color: Colors.blue,
+            color: Colors.blue.withOpacity(0.1),
           )),
           SizedBox(
-              width: 49.4.w,
-              child: tableList(currentHated, Icons.heart_broken)),
+              width: 49.w, child: tableList(currentHated, Icons.heart_broken)),
         ],
       );
     }
@@ -150,15 +160,15 @@ class _CreateMenuState extends State<CreateMenu> {
                     alignment: Alignment.center,
                     child: Text(
                       currentUser[index].name,
-                      style: const TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: rowFontSize),
                     ),
                   ),
                 );
               },
               childCount: currentUser.length,
             ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: countOfRows,
               mainAxisSpacing: 5,
               crossAxisSpacing: 5,
               childAspectRatio: 6.0,
@@ -168,8 +178,7 @@ class _CreateMenuState extends State<CreateMenu> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return SizedBox(
       child: Column(
         children: [
           pickUser(),

@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable, no_logic_in_create_state, list_remove_unrelated_type
 
+import 'dart:math';
+
 import 'package:eat_for_kids/firebase/delete_statements.dart';
 import 'package:eat_for_kids/firebase/insert_statements.dart';
 import 'package:eat_for_kids/firebase/update_statements.dart';
@@ -29,6 +31,7 @@ class _ChooseUserState extends State<ChooseUser> {
 
   int _selectedValue = 0;
   List<ChildValue> currentUser;
+
   late bool firstStarted;
   int widgetHeight = 15;
   late bool coloredFirst;
@@ -37,6 +40,7 @@ class _ChooseUserState extends State<ChooseUser> {
   bool hoverHated = false;
 
   TextEditingController textController = TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   bool showAddFavorites = false;
   bool showAddHatings = false;
@@ -65,6 +69,7 @@ class _ChooseUserState extends State<ChooseUser> {
 
   @override
   Widget build(BuildContext context) {
+    List<ChildValue> showedUser = currentUser;
     var sizeOfPopup = MediaQuery.of(context).copyWith().size.height * 0.40;
     var dividerHeight = 0.1.h;
 
@@ -335,8 +340,7 @@ class _ChooseUserState extends State<ChooseUser> {
                                 delegate: SliverChildBuilderDelegate(
                                     childCount: values.length,
                                     (BuildContext context, int index) {
-                                  final itemR = currentUser[_selectedValue]
-                                      .prefferdFood[index];
+                                  var itemR = Random().nextInt(1000).toString();
                                   coloredFirst
                                       ? coloredFirst = false
                                       : coloredFirst = true;
@@ -476,25 +480,65 @@ class _ChooseUserState extends State<ChooseUser> {
                     padding: EdgeInsets.zero,
                     // Display a CupertinoPicker with list of fruits.
                     onPressed: () => _showDialog(
-                      CupertinoPicker(
-                        magnification: 1.5,
-                        squeeze: 1.2,
-                        useMagnifier: true,
-                        itemExtent: 8.h,
-                        // This is called when selected item is changed.
-                        onSelectedItemChanged: (int selectedItem) {
-                          setState(() {
-                            _selectedValue = selectedItem;
-                          });
-                        },
-                        children: List<Widget>.generate(currentUser.length,
-                            (int index) {
-                          return Center(
-                            child: Text(
-                              currentUser[index].name,
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 10.h,
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: CupertinoSearchTextField(
+                                controller: controller,
+                                onChanged: (value) {
+                                  List<ChildValue> localList = [];
+
+                                  for (var i = 0; i < currentUser.length; i++) {
+                                    if (currentUser[i].name.contains(value)) {
+                                      localList.add(currentUser[i]);
+                                    }
+                                  }
+                                  setState(() {
+                                    showedUser = localList;
+                                  });
+                                },
+                                onSubmitted: (value) {
+                                  List<ChildValue> localList = [];
+
+                                  for (var i = 0; i < currentUser.length; i++) {
+                                    if (currentUser[i].name.contains(value)) {
+                                      localList.add(currentUser[i]);
+                                    }
+                                  }
+                                  setState(() {
+                                    showedUser = localList;
+                                  });
+                                },
+                                autocorrect: true,
+                              ),
                             ),
-                          );
-                        }),
+                          ),
+                          Expanded(
+                            child: CupertinoPicker(
+                              magnification: 1.5,
+                              squeeze: 1.2,
+                              useMagnifier: true,
+                              itemExtent: 8.h,
+                              // This is called when selected item is changed.
+                              onSelectedItemChanged: (int selectedItem) {
+                                setState(() {
+                                  _selectedValue = selectedItem;
+                                });
+                              },
+                              children: List<Widget>.generate(showedUser.length,
+                                  (int index) {
+                                return Center(
+                                  child: Text(
+                                    showedUser[index].name,
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     // This displays the selected fruit name.

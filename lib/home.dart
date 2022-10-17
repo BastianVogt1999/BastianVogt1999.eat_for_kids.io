@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import 'firebase/select_statements.dart';
 import 'nav_bar.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -81,8 +82,15 @@ class _HomeWidgetState extends State<HomeWidget> {
     }
 
     var sizeOfPopup = MediaQuery.of(context).copyWith().size.height * 0.40;
-    void showPopupDelete() {
+    Future<void> showPopupDelete() async {
       List<CupertinoActionSheetAction> listSheets = [];
+
+      if (currentUser.isEmpty) {
+        List<ChildValue> localList =
+            await SelectStatements().selectAllUserOfCompany();
+
+        currentUser = localList;
+      }
 
       for (var i = 0; i < currentUser.length; i++) {
         CupertinoActionSheetAction value = CupertinoActionSheetAction(
